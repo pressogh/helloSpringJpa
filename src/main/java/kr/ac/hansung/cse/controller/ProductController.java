@@ -53,7 +53,11 @@ public class ProductController {
                                Model model) {
         List<Product> products;
 
-        if (categoryId != null) {
+        if (categoryId != null && keyword != null && !keyword.isBlank()) {
+            products = productService.searchByCategory(categoryId).stream()
+                    .filter(product -> product.getName() != null && product.getName().contains(keyword))
+                    .toList();
+        } else if (categoryId != null) {
             products = productService.searchByCategory(categoryId);
         } else if (keyword != null && !keyword.isBlank()) {
             products = productService.searchByName(keyword);
